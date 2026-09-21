@@ -1,7 +1,6 @@
 import gleam/otp/static_supervisor
 import gleam/otp/supervision
 import mist
-import printer_coven/web_app/dashboard
 import wisp.{type Request, type Response}
 import wisp/wisp_mist
 
@@ -32,7 +31,7 @@ fn handle_request(req: Request) -> Response {
 
   case wisp.path_segments(req) {
     // This matches `/`
-    [] -> dashboard.page(req)
+    [] -> wisp.not_found()
 
     // This matches all other paths
     _ -> wisp.not_found()

@@ -12,5 +12,6 @@ devenv.local.yaml
 # gleam
 *.beam
 *.ez
+.lustre
 build
 erl_crash.dump
