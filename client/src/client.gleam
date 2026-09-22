@@ -4,11 +4,15 @@ import client/job_queue
 import client/projects
 import client/routes
 import client/ui_common
+import gleam/json
+import gleam/result
 import lustre
 import lustre/effect.{type Effect}
 import lustre/element.{type Element}
 import lustre/element/html
 import modem
+import plinth/browser/document
+import plinth/browser/element as plinth_element
 
 type Model {
   Model(route: routes.Route)
@@ -19,18 +23,22 @@ type Message {
 }
 
 pub fn main() -> Nil {
+  let initial_route =
+    document.query_selector("#model")
+    |> result.map(plinth_element.inner_text)
+    |> result.try(fn(json_str) {
+      json.parse(json_str, routes.route_decoder())
+      |> result.replace_error(Nil)
+    })
+    |> result.unwrap(routes.Dashboard)
+
   let app = lustre.application(init, update, view)
-  let assert Ok(_) = lustre.start(app, "#app", Nil)
+  let assert Ok(_) = lustre.start(app, "#app", initial_route)
 
   Nil
 }
 
-fn init(_args) -> #(Model, Effect(Message)) {
-  let route = case modem.initial_uri() {
-    Ok(uri) -> routes.parse(uri)
-    Error(_) -> routes.Dashboard
-  }
-
+fn init(route: routes.Route) -> #(Model, Effect(Message)) {
   let model = Model(route:)
 
   let effect =

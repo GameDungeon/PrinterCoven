@@ -15,4 +15,5 @@ devenv.local.yaml
 .lustre
 build
 erl_crash.dump
-priv
+static
+

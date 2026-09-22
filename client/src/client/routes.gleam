@@ -1,4 +1,7 @@
+import gleam/dynamic/decode
 import gleam/int
+import gleam/json
+import gleam/option
 import gleam/uri.{type Uri}
 import lustre/attribute.{type Attribute}
 
@@ -35,4 +38,43 @@ pub fn href(route: Route) -> Attribute(msg) {
     NotFound(_) -> "/404"
   }
   attribute.href(url)
+}
+
+pub fn route_encoder(route: Route) -> json.Json {
+  case route {
+    Dashboard -> json.object([#("variant", json.string("Dashboard"))])
+    JobQueue -> json.object([#("variant", json.string("JobQueue"))])
+    Projects -> json.object([#("variant", json.string("Projects"))])
+    ProjectDetail(id) ->
+      json.object([
+        #("variant", json.string("ProjectDetail")),
+        #("id", json.int(id)),
+      ])
+    Filament -> json.object([#("variant", json.string("Filament"))])
+    NotFound(_) -> json.object([#("variant", json.string("NotFound"))])
+  }
+}
+
+pub fn route_decoder() -> decode.Decoder(Route) {
+  use variant <- decode.field("variant", decode.string)
+  case variant {
+    "Dashboard" -> decode.success(Dashboard)
+    "JobQueue" -> decode.success(JobQueue)
+    "Projects" -> decode.success(Projects)
+    "Filament" -> decode.success(Filament)
+    "NotFound" -> decode.success(NotFound(uri: uri.Uri(
+      scheme: option.None,
+      userinfo: option.None,
+      host: option.None,
+      port: option.None,
+      path: "",
+      query: option.None,
+      fragment: option.None,
+    )))
+    "ProjectDetail" -> {
+      use id <- decode.field("id", decode.int)
+      decode.success(ProjectDetail(id:))
+    }
+    _ -> decode.failure(Dashboard, "Route")
+  }
 }
