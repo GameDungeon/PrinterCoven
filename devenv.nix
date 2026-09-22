@@ -10,4 +10,6 @@
   languages.gleam.enable = true;
 
   # services.postgres.enable = true;
+
+  env.WISP_SECRET = "NotSoSecretAfterAll";
 }

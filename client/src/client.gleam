@@ -1,4 +1,7 @@
 import client/dashboard
+import client/filament
+import client/job_queue
+import client/projects
 import client/routes
 import client/ui_common
 import lustre
@@ -46,6 +49,10 @@ fn view(model: Model) -> Element(Message) {
   case model.route {
     routes.NotFound(_) -> html.div([], [html.text("404 Not Found")])
     routes.Dashboard -> dashboard.view()
+    routes.JobQueue -> job_queue.view()
+    routes.Projects -> projects.view()
+    routes.ProjectDetail(id) -> projects.view_project(id)
+    routes.Filament -> filament.view()
   }
 }
 

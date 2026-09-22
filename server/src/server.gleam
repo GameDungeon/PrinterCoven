@@ -7,13 +7,10 @@ pub fn main() {
   // Setup
   wisp.configure_logger()
 
-  let secret_key_base = wisp.random_string(64)
-  // TODO: Load from env
-
   // Start Actors
   let assert Ok(_) =
     supervisor.new(supervisor.OneForOne)
-    |> supervisor.add(web_server.supervised(secret_key_base))
+    |> supervisor.add(web_server.supervised())
     |> supervisor.start
 
   process.sleep_forever()
