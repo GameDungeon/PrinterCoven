@@ -18,4 +18,5 @@ services.postgres = {
   };
 
   env.WISP_SECRET = "NotSoSecretAfterAll";
+  env.DATABASE_URL = "postgres://ethan@127.0.0.1:5432/printer_coven";
 }

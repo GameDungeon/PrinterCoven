@@ -10,5 +10,4 @@ modem = ">= 2.1.3 and < 3.0.0"
 plinth = ">= 0.4.0 and < 1.0.0"
 
 [dev_dependencies]
-gleeunit = ">= 1.0.0 and < 2.0.0"
 lustre_dev_tools = ">= 2.3.6 and < 3.0.0"
